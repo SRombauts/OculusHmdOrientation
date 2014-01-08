@@ -1,13 +1,28 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
+Debug
+Release
+build
+lib
+OculusHmdOrientation
+doc
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
+CMakeCache.txt
+CMakeFiles
+*.cmake
+*.dir
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
+*.sln
+*.vcproj*
+*.vcxproj*
+*.ncb
+*.suo
+*.user
+*sdf
+*ipch
+*.make
+Makefile
+.settings
+
+*~
+
+log*.txt
+core

@@ -1,5 +1,5 @@
 /**
- * @file    OculusHmdOrientation.cpp
+ * @file    OculusHMD.cpp
  * @brief   Minimal application to get orientation from the Oculus Rift Head Mounted Display in C++ 
  *
  * Copyright (c) 2014 Sebastien Rombauts (sebastien.rombauts@gmail.com)
@@ -7,31 +7,16 @@
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  */
-#include "OVR.h"
+
+#include "OculusHMD.h"
 
 #include <iostream>
-#include <conio.h>
-#include <memory>
 
-class OculusHMD {
-public:
-    OculusHMD();
-    ~OculusHMD();
-    void Output();
-    void Loop();
+#ifndef _WIN32
+#include <unistd.h> // usleep
+#endif
 
-    // Fake OculusHMD rendering HMD info in cas of no device found (for dev)
-    void fakeInfo();
-
-private:
-    OVR::System                         mSystem;
-    OVR::Ptr<OVR::SensorDevice>            mSensorPtr;
-    std::shared_ptr<OVR::SensorFusion>  mSensorFusionPtr;
-    OVR::HMDInfo                        mHMDInfo;
-    bool                                mbInfoLoaded;
-};
-
-/// Now lets initialize the SDK:
+// Now lets initialize the SDK:
 OculusHMD::OculusHMD() :
     mbInfoLoaded(false) {
     OVR::Ptr<OVR::DeviceManager>    managerPtr;
@@ -134,7 +119,6 @@ void OculusHMD::Output() {
     }
 
     std::cout << std::endl << " Press ENTER to continue" << std::endl;
-
     std::cin.get();
 }
 
@@ -147,13 +131,18 @@ void OculusHMD::Loop() {
         std::cout << " Yaw: " << OVR::RadToDegree(yaw)
                   << ", Pitch: " << OVR::RadToDegree(pitch)
                   << ", Roll: " << OVR::RadToDegree(roll) << std::endl;
-        Sleep(200);
-
+#ifdef _WIN32
+        Sleep(200); // wait 200ms
         if (_kbhit())
             break;
+#else
+        usleep(200*1000); // wait 200ms
+#endif
     }
 }
 
+
+// Application entry-point
 int main() {
     OculusHMD oculusHMD;
     oculusHMD.Output();
